@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - TechCart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+
+        .cart-icon {
+            position: relative;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .cart-items {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .cart-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3em;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .item-category {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        .item-price {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #28a745;
+            margin: 10px 0;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-input {
+            width: 60px;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .btn-update {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .summary-title {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-total {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .summary-actions {
+            margin-top: 30px;
+        }
+
+        .btn-checkout {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+
+        .btn-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-continue {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        .btn-continue:hover {
+            background: #e0e0e0;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart-text {
+            font-size: 1.5em;
+            color: #999;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="/" class="logo">🛒 TechCart</a>
+            <a href="/cart" class="cart-icon">
+                🛒 Cart
+                <span th:if="${cartItemCount > 0}" class="cart-badge" th:text="${cartItemCount}">0</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">Shopping Cart</h1>
+
+        <div th:if="${cartItems.isEmpty()}" class="cart-items">
+            <div class="empty-cart">
+                <div class="empty-cart-icon">🛒</div>
+                <div class="empty-cart-text">Your cart is empty</div>
+                <a href="/" class="btn-checkout" style="text-decoration: none; display: inline-block; width: auto; padding: 15px 40px;">Continue Shopping</a>
+            </div>
+        </div>
+
+        <div th:unless="${cartItems.isEmpty()}" class="cart-layout">
+            <div class="cart-items">
+                <div th:each="item : ${cartItems}" class="cart-item">
+                    <div class="item-image">💻</div>
+                    <div class="item-details">
+                        <div class="item-name" th:text="${item.product.name}">Product Name</div>
+                        <span class="item-category" th:text="${item.product.category}">Category</span>
+                        <div class="item-price" th:text="'$' + ${#numbers.formatDecimal(item.product.price, 1, 2)}">$0.00</div>
+                        <div class="item-quantity">
+                            <form th:action="@{/cart/update}" method="post" class="quantity-control">
+                                <input type="hidden" name="cartItemId" th:value="${item.id}">
+                                <label>Quantity:</label>
+                                <input type="number" name="quantity" class="quantity-input" 
+                                       th:value="${item.quantity}" min="1" th:max="${item.product.stock}">
+                                <button type="submit" class="btn-update">Update</button>
+                            </form>
+                            <div>
+                                <strong>Subtotal:</strong> 
+                                <span th:text="'$' + ${#numbers.formatDecimal(item.totalPrice, 1, 2)}">$0.00</span>
+                            </div>
+                            <a th:href="@{/cart/remove/{id}(id=${item.id})}" class="btn-remove">Remove</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <h2 class="summary-title">Order Summary</h2>
+                <div class="summary-row">
+                    <span>Items:</span>
+                    <span th:text="${cartItemCount}">0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span th:text="'$' + ${#numbers.formatDecimal(cartTotal, 1, 2)}">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span>Free</span>
+                </div>
+                <div class="summary-total summary-row">
+                    <span>Total:</span>
+                    <span th:text="'$' + ${#numbers.formatDecimal(cartTotal, 1, 2)}">$0.00</span>
+                </div>
+                <div class="summary-actions">
+                    <button class="btn-checkout" onclick="alert('Checkout functionality would be implemented here!')">Proceed to Checkout</button>
+                    <a href="/" class="btn-continue">Continue Shopping</a>
+                    <a th:href="@{/cart/clear}" class="btn-remove" style="display: block; text-align: center; margin-top: 15px;">Clear Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

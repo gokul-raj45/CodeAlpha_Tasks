@@ -1,0 +1,6 @@
+node_modules/
+socialmedia.db
+.env
+*.log
+.DS_Store
+public/uploads/

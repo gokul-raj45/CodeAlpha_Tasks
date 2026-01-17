@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media - Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h2>Social Media</h2>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for friends..." class="search-input">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+            <div class="nav-links">
+                <a href="feed.html" class="nav-link">Feed</a>
+                <a href="profile.html" class="nav-link active">My Profile</a>
+                <button onclick="logout()" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="profile-layout">
+            <!-- Profile Header -->
+            <div class="profile-header card">
+                <div class="profile-info">
+                    <div class="profile-avatar" id="profileAvatarContainer">
+                        <span id="profileInitial">U</span>
+                        <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="profile-details">
+                        <h2 id="profileName">Loading...</h2>
+                        <p id="profileBio" class="profile-bio">Loading...</p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <strong id="postCount">0</strong>
+                                <span>Posts</span>
+                            </div>
+                            <div class="stat">
+                                <strong id="followersCount">0</strong>
+                                <span>Followers</span>
+                            </div>
+                            <div class="stat">
+                                <strong id="followingCount">0</strong>
+                                <span>Following</span>
+                            </div>
+                        </div>
+                        <button id="followBtn" class="btn btn-primary" style="display: none;" onclick="toggleFollow()">Follow</button>
+                        <button id="editProfileBtn" class="btn btn-outline" onclick="showEditModal()">Edit Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User's Posts -->
+            <div class="profile-posts">
+                <h3>Posts</h3>
+                <div id="userPostsContainer" class="posts-container">
+                    <div class="loading">Loading posts...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h3>Edit Profile</h3>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label>Profile Picture</label>
+                    <div class="profile-picture-upload">
+                        <div class="profile-picture-preview" id="profilePicturePreview">
+                            <span>No image</span>
+                        </div>
+                        <label for="editProfilePicture" class="btn btn-outline" style="width: auto; margin-top: 10px;">
+                            Change Profile Picture
+                        </label>
+                        <input type="file" id="editProfilePicture" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editFullName">Full Name</label>
+                    <input type="text" id="editFullName">
+                </div>
+                <div class="form-group">
+                    <label for="editBio">Bio</label>
+                    <textarea id="editBio" rows="4" placeholder="Tell us about yourself..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let profileUserId = null;
+        let isOwnProfile = false;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('id');
+            profileUserId = userId ? parseInt(userId) : null;
+            
+            if (profileUserId) {
+                loadProfile(profileUserId);
+            } else {
+                loadCurrentUserProfile();
+            }
+        });
+    </script>
+</body>
+</html>

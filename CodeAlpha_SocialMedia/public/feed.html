@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media - Feed</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h2>Social Media</h2>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for friends..." class="search-input">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+            <div class="nav-links">
+                <a href="feed.html" class="nav-link active">Feed</a>
+                <a href="#" onclick="viewProfile(); return false;" class="nav-link">My Profile</a>
+                <button onclick="logout()" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="feed-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="user-card">
+                    <h3 id="currentUsername">Loading...</h3>
+                    <p id="currentUserEmail">Loading...</p>
+                    <button onclick="viewProfile()" class="btn btn-outline">View Profile</button>
+                </div>
+            </aside>
+
+            <!-- Main Feed -->
+            <main class="feed-main">
+                <!-- Create Post -->
+                <div class="create-post-card card">
+                    <div class="create-post-header">
+                        <div class="create-post-avatar">
+                            <span id="createPostAvatar">U</span>
+                        </div>
+                        <textarea id="postContent" placeholder="What's on your mind?" rows="2" style="border: none; resize: none;"></textarea>
+                    </div>
+                    <form id="createPostForm" enctype="multipart/form-data">
+                        <div id="imagePreview" class="image-preview" style="display: none;">
+                            <img id="previewImage" src="" alt="Preview">
+                            <button type="button" class="remove-image-btn" onclick="removeImagePreview()">&times;</button>
+                        </div>
+                        <div class="create-post-actions">
+                            <label for="postImage" class="image-upload-label">
+                                <span class="upload-icon">📷</span>
+                                <span>Photo</span>
+                            </label>
+                            <input type="file" id="postImage" accept="image/*" style="display: none;">
+                            <button type="submit" class="btn btn-primary" id="submitPostBtn">Post</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Feed Tabs -->
+                <div class="feed-tabs">
+                    <button class="tab-btn active" onclick="loadFeed('all')">All Posts</button>
+                    <button class="tab-btn" onclick="loadFeed('following')">Following</button>
+                </div>
+
+                <!-- Posts Container -->
+                <div id="postsContainer" class="posts-container">
+                    <div class="loading">Loading posts...</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Comment Modal -->
+    <div id="commentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCommentModal()">&times;</span>
+            <h3>Comments</h3>
+            <div id="commentsList" class="comments-list"></div>
+            <form id="commentForm" class="comment-form">
+                <textarea id="commentContent" placeholder="Write a comment..." rows="3" required></textarea>
+                <button type="submit" class="btn btn-primary">Post Comment</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let currentPostId = null;
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadCurrentUser();
+            loadFeed('all');
+        });
+    </script>
+</body>
+</html>

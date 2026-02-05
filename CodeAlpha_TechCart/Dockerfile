@@ -4,11 +4,15 @@ WORKDIR /app
 
 COPY . .
 
-# FIX: give execute permission to mvnw
+# mvnw executable permission
 RUN chmod +x mvnw
 
+# build jar
 RUN ./mvnw clean package -DskipTests
+
+# find the jar and rename to app.jar
+RUN cp target/*.jar app.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["java", "-jar", "app.jar"]

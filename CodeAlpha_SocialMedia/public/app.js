@@ -1,5 +1,6 @@
 // API Base URL
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'https://codealpha-tasks-f8j1.onrender.com/api';
+
 
 // Token Management
 function getToken() {

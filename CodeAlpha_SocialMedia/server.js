@@ -9,7 +9,8 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
 const JWT_SECRET = 'your-secret-key-change-in-production';
 
 // Create uploads directory if it doesn't exist
@@ -600,5 +601,5 @@ app.post('/api/posts/:id/share', authenticateToken, (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
